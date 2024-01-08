@@ -16,7 +16,7 @@ public class BFS_AI {
     
     public void input() {
     	try {
-            FileInputStream fis = new FileInputStream("D:\\AI\\BFS_AI\\src\\input.txt");
+            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\input.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
@@ -24,7 +24,6 @@ public class BFS_AI {
             int m = Integer.parseInt(tokens[1]);
             adj = new ArrayList[n + 1];
             visited = new boolean[n + 1];
-
             for (int i = 1; i <= n; i++) {
                 adj[i] = new ArrayList<>();
             }
