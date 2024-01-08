@@ -10,22 +10,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BFS_typeChar {
-	public int n;
-	public ArrayList<Character>[] adj;
+    public int n, m;
+    public ArrayList<Character>[] adj;
     public boolean[] visited;
-    
+
     public void input() {
-    	try {
-            FileInputStream fis = new FileInputStream("D:\\AI\\BFS_AI\\src\\input.txt");
+        try {
+            FileInputStream fis = new FileInputStream("D:\\AI\\BFS_AI\\src\\input2.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
             n = Integer.parseInt(tokens[0]);
-            int m = Integer.parseInt(tokens[1]);
-            adj = new ArrayList[n + 1];
-            visited = new boolean[n + 1];
+            m = Integer.parseInt(tokens[1]);
+            adj = new ArrayList[n + 10];
+            visited = new boolean[n + 10];
 
-            for (int i = 1; i <= n; i++) {
+            for (int i = 0; i < n; i++) {
                 adj[i] = new ArrayList<>();
             }
             Arrays.fill(visited, false);
@@ -35,7 +35,7 @@ public class BFS_typeChar {
                 tokens = line.split(" ");
                 char x = tokens[0].charAt(0);
                 char y = tokens[1].charAt(0);
-                adj[x].add(y);
+                adj[x - 'A'].add(y); // Chuyển đổi ký tự thành chỉ số mảng (vd: 'A' -> 0)
             }
 
             br.close();
@@ -43,54 +43,63 @@ public class BFS_typeChar {
             e.printStackTrace();
         }
     }
-    
-    public void BFS_TimDuong(int u) {
-        Queue<Integer> q = new LinkedList<>();
+
+    public void BFS_TimDuong(char u) {
+        Queue<Character> q = new LinkedList<>();
         q.add(u);
-        visited[u] = true;
+        visited[u - 'A'] = true;
         System.out.print("=> ");
         while (!q.isEmpty()) {
-            int v = q.poll();
+            char v = q.poll();
             System.out.print(v + " ");
-            for (int x : adj[v]) {
-                if (!visited[x]) {
-                    q.add(x);
-                    visited[x] = true;
+
+            if (adj[v - 'A'] != null) { // Kiểm tra xem có cạnh nào được thêm vào không
+                for (Character x : adj[v - 'A']) {
+                    if (!visited[x - 'A']) {
+                        q.add(x);
+                        visited[x - 'A'] = true;
+                    }
                 }
             }
         }
         Arrays.fill(visited, false);
     }
-    public void BFS_TimDinh(int u) {
-        Queue<Integer> q = new LinkedList<>();
-        int[] path = new int[n + 1];
+
+
+    public void BFS_TimDinh(char u) {
+        Queue<Character> q = new LinkedList<>();
+        char[] path = new char[n +1];
         boolean[] visited = new boolean[n + 1];
-        Arrays.fill(path, -1);
+        Arrays.fill(path, '\0');
         Arrays.fill(visited, false);
 
-        q.add(1); 
-        visited[1] = true;
-        path[1] = 0; 
+        q.add(u);
+        visited[u - 'A'] = true;
+        path[u -'A'] = '\0';
+
         while (!q.isEmpty()) {
-            int x = q.poll();
+            char x = q.poll();
             if (x == u) {
                 printPath(path, u);
                 return;
             }
 
-            for (int k : adj[x]) {
-                if (!visited[k]) {
-                    q.add(k);
-                    visited[k] = true;
-                    path[k] = x;
+            
+                for (Character k : adj[x - 'A']) {
+                    if (!visited[k - 'A']) {
+                        q.add(k);
+                        visited[k - 'A'] = true;
+                        path[k - 'A'] = x;
+                    }
                 }
             }
         }
-    }
+    
 
-    private void printPath(int[] path, int j) {
-        if (j == 0) return; 
-        printPath(path, path[j]); // Đệ quy
+    private void printPath(char[] path, char j) {
+        if (j == '\0') return;
+        printPath(path, path[j - 'A']);
         System.out.print(j + " ");
     }
+
 }
