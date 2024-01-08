@@ -68,14 +68,14 @@ public class BFS_typeChar {
 
     public void BFS_TimDinh(char u) {
         Queue<Character> q = new LinkedList<>();
-        char[] path = new char[n +1];
-        boolean[] visited = new boolean[n + 1];
+        char[] path = new char[n + 10];
+        boolean[] visited = new boolean[n + 10];
         Arrays.fill(path, '\0');
         Arrays.fill(visited, false);
 
-        q.add(u);
-        visited[u - 'A'] = true;
-        path[u -'A'] = '\0';
+        q.add('A');
+        visited['A' - 'A'] = true;
+        path['A' - 'A'] = '\0'; 
 
         while (!q.isEmpty()) {
             char x = q.poll();
@@ -84,7 +84,7 @@ public class BFS_typeChar {
                 return;
             }
 
-            
+            if (adj[x - 'A'] != null) {
                 for (Character k : adj[x - 'A']) {
                     if (!visited[k - 'A']) {
                         q.add(k);
@@ -94,6 +94,7 @@ public class BFS_typeChar {
                 }
             }
         }
+        }
     
 
     private void printPath(char[] path, char j) {
@@ -101,5 +102,4 @@ public class BFS_typeChar {
         printPath(path, path[j - 'A']);
         System.out.print(j + " ");
     }
-
 }
