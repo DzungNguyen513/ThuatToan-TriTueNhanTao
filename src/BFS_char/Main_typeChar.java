@@ -16,7 +16,7 @@ public class Main_typeChar {
 			System.out.println("|1. BFS theo đường đi từ 1 đỉnh cho trước|");
 			System.out.println("|2. BFS tìm đường đi đến 1 đỉnh bất kì   |");
 			System.out.println("|3. Thoát !                              |");
-			System.out.println("-----------------------------------------");
+			System.out.println("-----------------Group7-------------------");
 			System.out.print("Nhập lựa chọn: ");  lc = sc.nextInt();
 	        if(lc == 1) {
 	        	System.out.print("Nhập đỉnh bạn muốn đi: ");
