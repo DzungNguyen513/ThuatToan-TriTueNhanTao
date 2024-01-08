@@ -22,8 +22,8 @@ public class BFS_typeChar {
             String[] tokens = line.split(" ");
             n = Integer.parseInt(tokens[0]);
             m = Integer.parseInt(tokens[1]);
-            adj = new ArrayList[n + 10];
-            visited = new boolean[n + 10];
+            adj = new ArrayList[1001];
+            visited = new boolean[1001];
 
             for (int i = 0; i < n; i++) {
                 adj[i] = new ArrayList<>();
