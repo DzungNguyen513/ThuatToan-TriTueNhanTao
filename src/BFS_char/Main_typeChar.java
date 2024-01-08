@@ -8,7 +8,7 @@ public class Main_typeChar {
 
 	public static void main(String[] args) {
 		Scanner sc  = new Scanner(System.in);
-		BFS_AI b = new BFS_AI();
+		BFS_typeChar b = new BFS_typeChar();
 		b.input();
 		int lc = 0;
 		do {
@@ -20,12 +20,12 @@ public class Main_typeChar {
 			System.out.print("Nhập lựa chọn: ");  lc = sc.nextInt();
 	        if(lc == 1) {
 	        	System.out.print("Nhập đỉnh bạn muốn đi: ");
-	        	int v = sc.nextInt();
+	        	char v = sc.next().charAt(0);
 	        	b.BFS_TimDuong(v);
 	        	System.out.println();
 	        } else if(lc == 2) {
 	        	System.out.print("Nhập đỉnh bạn muốn tìm: ");
-	        	int v = sc.nextInt();
+	        	char v = sc.next().charAt(0);
 	        	b.BFS_TimDinh(v);
 	        	System.out.println();
 	        } else if(lc == 3) {
