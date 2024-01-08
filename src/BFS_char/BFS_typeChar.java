@@ -1,4 +1,5 @@
-package BFS;
+package BFS_char;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,11 +8,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
-public class BFS_AI {
+public class BFS_typeChar {
 	public int n;
-	public ArrayList<Integer>[] adj;
+	public ArrayList<Character>[] adj;
     public boolean[] visited;
     
     public void input() {
@@ -33,8 +33,8 @@ public class BFS_AI {
             for (int i = 0; i < m; i++) {
                 line = br.readLine();
                 tokens = line.split(" ");
-                int x = Integer.parseInt(tokens[0]);
-                int y = Integer.parseInt(tokens[1]);
+                char x = tokens[0].charAt(0);
+                char y = tokens[1].charAt(0);
                 adj[x].add(y);
             }
 
@@ -93,5 +93,4 @@ public class BFS_AI {
         printPath(path, path[j]); // Đệ quy
         System.out.print(j + " ");
     }
-
 }
