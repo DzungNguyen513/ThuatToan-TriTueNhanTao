@@ -16,7 +16,7 @@ public class BFS_typeChar {
 
     public void input() {
         try {
-            FileInputStream fis = new FileInputStream("D:\\AI\\BFS_AI\\src\\input2.txt");
+            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\input2.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
