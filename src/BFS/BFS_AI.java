@@ -35,8 +35,7 @@ public class BFS_AI {
                 int x = Integer.parseInt(tokens[0]);
                 int y = Integer.parseInt(tokens[1]);
                 adj[x].add(y);
-            }
-
+            }	           
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -76,7 +75,6 @@ public class BFS_AI {
                 printPath(path, u);
                 return;
             }
-
             for (int k : adj[x]) {
                 if (!visited[k]) {
                     q.add(k);

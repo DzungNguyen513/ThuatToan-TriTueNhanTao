@@ -35,7 +35,7 @@ public class BFS_typeChar {
                 tokens = line.split(" ");
                 char x = tokens[0].charAt(0);
                 char y = tokens[1].charAt(0);
-                adj[x - 'A'].add(y); // Chuyển đổi ký tự thành chỉ số mảng (vd: 'A' -> 0)
+                adj[x - 'A'].add(y); 
             }
 
             br.close();
@@ -53,7 +53,7 @@ public class BFS_typeChar {
             char v = q.poll();
             System.out.print(v + " ");
 
-            if (adj[v - 'A'] != null) { // Kiểm tra xem có cạnh nào được thêm vào không
+            if (adj[v - 'A'] != null) {
                 for (Character x : adj[v - 'A']) {
                     if (!visited[x - 'A']) {
                         q.add(x);
@@ -73,9 +73,9 @@ public class BFS_typeChar {
         Arrays.fill(path, '\0');
         Arrays.fill(visited, false);
 
-        q.add(u);
-        visited[u - 'A'] = true;
-        path[u -'A'] = '\0';
+        q.add('A');
+        visited['A' - 'A'] = true;
+        path['A' -'A'] = '\0';
 
         while (!q.isEmpty()) {
             char x = q.poll();
@@ -83,23 +83,18 @@ public class BFS_typeChar {
                 printPath(path, u);
                 return;
             }
-
-            
-                for (Character k : adj[x - 'A']) {
-                    if (!visited[k - 'A']) {
-                        q.add(k);
-                        visited[k - 'A'] = true;
-                        path[k - 'A'] = x;
-                    }
+            for (Character k : adj[x]) {
+                if (!visited[k ]) {
+                    q.add(k);
+                    visited[k] = true;
+                    path[k] = x;
                 }
             }
-        }
-    
-
+       }
+    }
     private void printPath(char[] path, char j) {
         if (j == '\0') return;
         printPath(path, path[j - 'A']);
         System.out.print(j + " ");
     }
-
 }

@@ -33,7 +33,6 @@ public class Main_typeChar {
 	        }
 		}while (lc != 0);   
 		sc.close();
-
 	}
 
 }
