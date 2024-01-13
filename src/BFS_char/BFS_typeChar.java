@@ -115,10 +115,10 @@ public class BFS_typeChar {
         }
     }
 
-    public void inDuongDi(char[] path, char j, boolean isLast) {
-        if (j == '\0') return;
-        inDuongDi(path, path[j - 'A'], false);
-        System.out.print(j);
+    public void inDuongDi(char[] p, char i, boolean isLast) {
+        if (i == '\0') return;
+        inDuongDi(p, p[i - 'A'], false);
+        System.out.print(i);
         if (!isLast) {
             System.out.print("->");
         }
