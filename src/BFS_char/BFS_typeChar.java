@@ -64,8 +64,6 @@ public class BFS_typeChar {
         }
         Arrays.fill(visited, false);
     }
-
-
     public void BFS_TimDinh(char u) {
         Queue<Character> q = new LinkedList<>();
         char[] path = new char[n + 10];
@@ -75,29 +73,62 @@ public class BFS_typeChar {
 
         q.add('A');
         visited['A' - 'A'] = true;
-        path['A' -'A'] = '\0';
+        path['A' - 'A'] = '\0';
 
-        path['A' - 'A'] = '\0'; 
+        System.out.println("Phat trien trang thai\tTrang thai ke\t\tDanh Sach L");
+        System.out.println("==================================================================================");
+        boolean kt = false;
+
+        
         while (!q.isEmpty()) {
             char x = q.poll();
+
             if (x == u) {
-                printPath(path, u);
-                return;
+            	kt = true;
+            	System.out.print("Found "+u);
+            	System.out.println();
+            	System.out.print("=> ");
+            	inDuongDi(path, u, true);
+                System.out.println();
+                break; 
             }
             if (adj[x - 'A'] != null) {
-                for (Character k : adj[x - 'A']) {
+                System.out.print(x + "\t\t");
+                System.out.print("|");
+                for (char c : adj[x - 'A']) {
+                    System.out.print(c + " ");
+                }
+                System.out.print("\t\t\t|");
+
+                for (char k : adj[x - 'A']) {
                     if (!visited[k - 'A']) {
                         q.add(k);
                         visited[k - 'A'] = true;
                         path[k - 'A'] = x;
                     }
                 }
+                inDSachL(q);
             }
         }
+        if(!kt) {
+        	System.out.print("Not Found "+u +" !");
+        }
     }
-    private void printPath(char[] path, char j) {
+
+    public void inDuongDi(char[] path, char j, boolean isLast) {
         if (j == '\0') return;
-        printPath(path, path[j - 'A']);
-        System.out.print(j + " ");
+        inDuongDi(path, path[j - 'A'], false);
+        System.out.print(j);
+        if (!isLast) {
+            System.out.print("->");
+        }
+    }
+
+    public void inDSachL(Queue<Character> queue) {
+        System.out.print("|");
+        for (char c : queue) {
+            System.out.print(c + " ");
+        }
+        System.out.println();
     }
 }
