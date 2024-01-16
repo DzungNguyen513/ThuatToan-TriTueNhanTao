@@ -14,7 +14,7 @@ public class BFS_typeChar {
     public int n, m;
     public ArrayList<Character>[] adj;
     public boolean[] visited;
-    public String filePath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\output.txt";
+    public String filePath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\output.txt";
     public FileWriter writer;
 
     public BFS_typeChar() {
@@ -27,7 +27,7 @@ public class BFS_typeChar {
 
     public void input() {
         try {
-            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\input2.txt");
+            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\input.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");

@@ -9,5 +9,4 @@ I			|G 			||G E F
 G			|			||E F 
 E			|G K 			||F K 
 F			|K 			||K 
-Found K
-=> A->C->E->K
+Not Found H !
