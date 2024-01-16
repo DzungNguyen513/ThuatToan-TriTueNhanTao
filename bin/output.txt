@@ -1,13 +1,13 @@
-Phat trien tran thai       Trang thai ke         Danh Sach L
-==================================================================================
-     	    	   |                     |A
-		 A         | B C D	             |D C B 
-         B         | I G                 |G I D C
-         C         | E F                 |F E G I D
-         D         | C F	             |F C F E G I
-         I         | G                   |G F C F E G
-         G         |                     |G F C F E
-         E         | G K                 |K G G F C F
-         F         | K                   |K K G G F C
- Found G
-A -> B -> G 
+==========================================================================
+Phat trien trang thai	Trang thai ke		Danh Sach L
+==========================================================================
+A			|B C D 			||B C D 
+B			|I G 			||C D I G 
+C			|E F 			||D I G E F 
+D			|C F 			||I G E F 
+I			|G 			||G E F 
+G			|			||E F 
+E			|G K 			||F K 
+F			|K 			||K 
+Found K
+=> A->C->E->K

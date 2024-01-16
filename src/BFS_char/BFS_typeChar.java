@@ -88,10 +88,12 @@ public class BFS_typeChar {
             visited['A' - 'A'] = true;
             path['A' - 'A'] = '\0';
 
+            System.out.println("====================================================================");
+            writer.write("==========================================================================" + System.lineSeparator());
             System.out.println("Phat trien trang thai\tTrang thai ke\t\tDanh Sach L");
             writer.write("Phat trien trang thai\tTrang thai ke\t\tDanh Sach L" + System.lineSeparator());
-            System.out.println("==================================================================================");
-            writer.write("==================================================================================" + System.lineSeparator());
+            System.out.println("====================================================================");
+            writer.write("==========================================================================" + System.lineSeparator());
 
             boolean kt = false;
 
