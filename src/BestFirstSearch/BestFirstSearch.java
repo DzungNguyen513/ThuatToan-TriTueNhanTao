@@ -49,31 +49,59 @@ public class BestFirstSearch {
         }
     }
 
-    public void bestFirstSearch(char a, char b) {
-        PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(node -> node.kt));
+    public void bestFirstSearch(char start, char goal) {
+        PriorityQueue<Node> q = new PriorityQueue<>(Comparator.comparingInt(node -> node.heuristic));
         Map<Character, Character> p = new HashMap<>();
-        q.add(new Node(a, 0, uocTinh(a, b)));
-        p.put(a, null);
+        Map<Character, Integer> costs = new HashMap<>();
+        q.add(new Node(start, 0, uocTinh(start, goal)));
+        p.put(start, null);
+        costs.put(start, 0);
+
+        System.out.println("==========================================================================================");
+        System.out.println("Phat trien trang thai\tTrang thai ke\t\t\tDanh sach L");
+        System.out.println("==========================================================================================");
+
         while (!q.isEmpty()) {
-            Node x = q.poll();
-            char v = x.tenDinh;
-            if (v == b) {
-            	inDuongDi(p, b);
+            Node current = q.poll();
+            char currentChar = current.tenDinh;
+            int currentCost = costs.getOrDefault(currentChar, 0);
+
+            if (currentChar == goal) {
+                System.out.println(current.tenDinh + "-" + current.heuristic + "\t\t\t| Trạng thái kết thúc");
+                System.out.println("Found " + goal + " !");
+                inDuongDi(p, goal);
                 return;
             }
-            if (!visited[v - 'A']) {
-                visited[v - 'A'] = true;
-                for (Edge edge : adj[v - 'A']) {
+            System.out.print(currentChar + "-" + current.heuristic + "\t\t\t| ");
+            List<Node> children = new ArrayList<>();
+            if (!visited[currentChar - 'A']) {
+                visited[currentChar - 'A'] = true;
+                for (Edge edge : adj[currentChar - 'A']) {
                     if (!visited[edge.dinhDen - 'A']) {
-                        int ktDinh = uocTinh(edge.dinhDen, b);
-                        q.add(new Node(edge.dinhDen, edge.chiPhiCanh, ktDinh));
-                        p.put(edge.dinhDen, v);
+                        int newCost = currentCost + edge.cost;
+                        int heuristic = uocTinh(edge.dinhDen, goal);
+                        Node childNode = new Node(edge.dinhDen, newCost, heuristic);
+                        q.add(childNode);
+                        p.put(edge.dinhDen, currentChar);
+                        costs.put(edge.dinhDen, newCost);
+                        children.add(childNode);
                     }
                 }
             }
+            for (Node child : children) {
+                System.out.print(child.tenDinh + "-" + child.heuristic + " ");
+            }
+            System.out.print("\t\t\t| ");
+            PriorityQueue<Node> sortedQueue = new PriorityQueue<>(q);
+            while (!sortedQueue.isEmpty()) {
+                Node node = sortedQueue.poll();
+                System.out.print(node.tenDinh + "-" + node.heuristic + " ");
+            }
+            System.out.println();
         }
         System.out.println("Not Found !");
     }
+
     private int uocTinh(char node, char goal) {
         Map<Character, Integer> hm = new HashMap<>();
         hm.put('A', 20);
@@ -91,19 +119,20 @@ public class BestFirstSearch {
 
     private void inDuongDi(Map<Character, Character> path, char goal) {
         try {
-            List<Character> duongDi = new ArrayList<>();          
+            List<Character> duongDi = new ArrayList<>();
             Character v = goal;
-            while (v != null) { 
-            	duongDi.add(v);
-                v = path.get(v); 
+            while (v != null) {
+                duongDi.add(v);
+                v = path.get(v);
             }
-            Collections.reverse(duongDi); 
+            Collections.reverse(duongDi);
             System.out.println("=> " + duongDi);
-            writer.write(" " + duongDi + System.lineSeparator());
-            writer.flush(); 
+            writer.write("=> " + duongDi + System.lineSeparator());
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 }
+
 
