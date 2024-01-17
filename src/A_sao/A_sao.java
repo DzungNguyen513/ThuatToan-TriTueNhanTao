@@ -1,113 +1,152 @@
 package A_sao;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class A_sao {
 
-    private Map<String, Map<String, Node>> graph;
+    public int n, m;
+    public ArrayList<EdgeWeight>[] adj;
+    public boolean[] visited;
+    public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\input.txt";
+    public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt";
 
-    public static class Node {
-        String name;
-        int cost;
-        int heuristic;
-
-        Node(String name, int cost, int heuristic) {
-            this.name = name;
-            this.cost = cost;
-            this.heuristic = heuristic;
-        }
-    }
-
+    
     public A_sao() {
-        this.graph = new HashMap<>();
     }
 
-    public void input(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\\s+");
+    public void input() {
+        try {
+            FileInputStream fis = new FileInputStream(inPath);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            String line = br.readLine();
+            String[] tokens = line.split(" ");
+            n = Integer.parseInt(tokens[0]);
+            m = Integer.parseInt(tokens[1]);
+            adj = new ArrayList[1001];
+            visited = new boolean[1001];
 
-                String node = parts[0];
-                if (parts.length == 2) {
-                    graph.put(node, new HashMap<>());
-                } else {
-                    Map<String, Node> neighbors = new HashMap<>();
-                    for (int i = 2; i < parts.length; i += 3) {
-                        String neighbor = parts[i];
-                        int cost = Integer.parseInt(parts[i + 1]);
-                        int heuristic = Integer.parseInt(parts[i + 2]);
-                        neighbors.put(neighbor, new Node(neighbor, cost, heuristic));
-                    }
-                    graph.put(node, neighbors);
-                }
+            for (int i = 0; i < 1001; i++) {
+                adj[i] = new ArrayList<>();
             }
+            Arrays.fill(visited, false);
+
+            for (int i = 0; i < m; i++) {
+                line = br.readLine();
+                tokens = line.split(" ");
+                char source = tokens[0].charAt(0);
+                char target = tokens[2].charAt(0);
+                int cost = Integer.parseInt(tokens[4]);
+                adj[source - 'A'].add(new EdgeWeight(target, cost));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public List<String> astar(String start, String goal) {
-        PriorityQueue<Node> openSet = new PriorityQueue<>(Comparator.comparingInt(node -> node.cost + node.heuristic));
-        Set<String> closedSet = new HashSet<>();
-        Map<String, Integer> gScore = new HashMap<>();
-        Map<String, String> cameFrom = new HashMap<>();
+    public void aStar(char start, char goal) {
+        PriorityQueue<NodeWeight> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.fCost));
+        Map<Character, Character> parent = new HashMap<>();
+        Map<Character, Integer> gCosts = new HashMap<>();
+        Map<Character, Integer> hCosts = new HashMap<>();
 
-        for (String node : graph.keySet()) {
-            gScore.put(node, Integer.MAX_VALUE);
-        }
+        priorityQueue.add(new NodeWeight(start, 0, heuristic(start, goal), 0));
+        parent.put(start, null);
+        gCosts.put(start, 0);
 
-        gScore.put(start, 0);
-        openSet.add(new Node(start, 0, 0));
+        System.out.printf("%-5s %-5s %-5s  %-5s  %-5s  %-5s   %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
 
-        while (!openSet.isEmpty()) {
-            Node current = openSet.poll();
+        while (!priorityQueue.isEmpty()) {
+            NodeWeight current = priorityQueue.poll();
+            char currentName = current.tenDinh;
 
-            if (current.name.equals(goal)) {
-                return reconstructPath(cameFrom, goal);
+            if (currentName == goal) {
+            	System.out.println(current.tenDinh + "      Trạng thái kết thúc");
+                System.out.println("Found " + currentName+" !");
+                printPath(parent, goal);
+                break;
             }
 
-            closedSet.add(current.name);
+            if (!visited[currentName - 'A']) {
+                visited[currentName - 'A'] = true;
 
-            for (Map.Entry<String, Node> entry : graph.get(current.name).entrySet()) {
-                String neighbor = entry.getKey();
-                Node data = entry.getValue();
+                for (EdgeWeight edge : adj[currentName - 'A']) {
+                    char neighborName = edge.dinhDen;
+                    int newGCost = gCosts.get(currentName) + edge.cost;
 
-                if (closedSet.contains(neighbor)) {
-                    continue;
-                }
+                    if (!visited[neighborName - 'A'] || newGCost < gCosts.getOrDefault(neighborName, Integer.MAX_VALUE)) {
+                        int heuristic = heuristic(neighborName, goal);
+                        int fCost = newGCost + heuristic;
 
-                int tentativeGScore = gScore.get(current.name) + data.cost;
-
-                if (tentativeGScore < gScore.get(neighbor)) {
-                    gScore.put(neighbor, tentativeGScore);
-                    cameFrom.put(neighbor, current.name);
-                    openSet.add(new Node(neighbor, gScore.get(neighbor), graph.get(neighbor).get(neighbor).heuristic));
+                        priorityQueue.add(new NodeWeight(neighborName, newGCost, heuristic, fCost));
+                        parent.put(neighborName, currentName);
+                        gCosts.put(neighborName, newGCost);
+                        hCosts.put(neighborName, heuristic);
+                        
+                        System.out.printf("%-5s  %-5s  %-5s  %-5s  %-5s  %-5s  %-30s\n",
+                                currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                    }
                 }
             }
         }
-
-        return null; // No path found
     }
 
-    private List<String> reconstructPath(Map<String, String> cameFrom, String current) {
-        List<String> path = new ArrayList<>();
-        while (cameFrom.containsKey(current)) {
+    private int heuristic(char node, char goal) {
+        Map<Character, Integer> hm = new HashMap<>();
+        hm.put('A', 14);
+        hm.put('B', 0);
+        hm.put('C', 15);
+        hm.put('D', 6);
+        hm.put('E', 8);
+        hm.put('F', 7);
+        hm.put('G', 12);
+        hm.put('H', 10);
+        hm.put('I', 4);
+        hm.put('K', 2);
+        return hm.getOrDefault(node, Integer.MAX_VALUE);
+    }
+
+    private void printPath(Map<Character, Character> parent, char goal) {
+        List<Character> path = new ArrayList<>();
+        Character current = goal;
+        int totalCost = 0;
+        while (current != null) {
             path.add(current);
-            current = cameFrom.get(current);
+            current = parent.get(current);
         }
         Collections.reverse(path);
-        return path;
+        System.out.println("=> " + path);
+        System.out.println("Độ dài: " + calculateTotalCost(path));
+    }
+    private int calculateTotalCost(List<Character> path) {
+        int totalCost = 0;
+
+        for (int i = 0; i < path.size() - 1; i++) {
+            char current = path.get(i);
+            char next = path.get(i + 1);
+
+            for (EdgeWeight edge : adj[current - 'A']) {
+                if (edge.dinhDen == next) {
+                    totalCost += edge.cost;
+                    break;
+                }
+            }
+        }
+
+        return totalCost;
+    }
+    public static void main(String[] args) {
+    	A_sao aStar = new A_sao();
+        aStar.input();
+
+        char startNode = 'A';
+        char goalNode = 'B';
+        aStar.aStar(startNode, goalNode);
     }
 }
+
+
