@@ -131,22 +131,22 @@ public class A_sao {
         System.out.println();
         System.out.println("=> Độ dài ngắn nhất: " + tinhKC(path));
     }
-    private int tinhKC(List<Character> path) {
-        int totalCost = 0;
+    private int tinhKC(List<Character> p) {
+        int kc = 0;
 
-        for (int i = 0; i < path.size() - 1; i++) {
-            char current = path.get(i);
-            char next = path.get(i + 1);
+        for (int i = 0; i < p.size() - 1; i++) {
+            char current = p.get(i);
+            char next = p.get(i + 1);
 
             for (EdgeWeight edge : adj[current - 'A']) {
                 if (edge.dinhDen == next) {
-                    totalCost += edge.cost;
+                	kc += edge.cost;
                     break;
                 }
             }
         }
 
-        return totalCost;
+        return kc;
     }
 }
 
