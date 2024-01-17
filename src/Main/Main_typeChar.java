@@ -9,7 +9,7 @@ import BestFirstSearch.BestFirstSearch;
 
 public class Main_typeChar {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		Scanner sc  = new Scanner(System.in);
 		int lc = 0;
 		do {
