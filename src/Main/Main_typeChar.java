@@ -42,11 +42,11 @@ public class Main_typeChar {
 				char v = sc.next().charAt(0);
 				bfs.bestFirstSearch('A', v);	        
 	        } else if(lc == 4) {
-	        	A_sao aStar = new A_sao();
-	            aStar.input();
+	        	A_sao a = new A_sao();
+	            a.input();
 	            System.out.print("Nhập đỉnh bạn muốn tìm: ");
 	            char v = sc.next().charAt(0);
-	            aStar.aStar('A', v);
+	            a.aStar('A', v);
 	        } else if(lc == 5) {
 	        	break;
 	        }
