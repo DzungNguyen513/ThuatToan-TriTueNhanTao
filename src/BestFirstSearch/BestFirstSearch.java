@@ -60,7 +60,7 @@ public class BestFirstSearch {
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
         System.out.println("Phat trien trang thai\t Trang thai ke\t\t\t Danh sach L");
-        writer.write("Phat trien trang thai\t Trang thai ke\t\t\tn Danh sach L"+ System.lineSeparator());
+        writer.write("Phat trien trang thai\t Trang thai ke\t\t\t Danh sach L"+ System.lineSeparator());
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
 
@@ -81,7 +81,7 @@ public class BestFirstSearch {
             System.out.print(outLine);
             writer.write(outLine);
             
-            List<Node> children = new ArrayList<>();
+            List<Node> child = new ArrayList<>();
             String ttKe = ""; 
 
             if (!visited[v - 'A']) {
@@ -94,7 +94,7 @@ public class BestFirstSearch {
                         q.add(dinhKe);
                         p.put(edge.dinhDen, v);
                         costs.put(edge.dinhDen, newCost);
-                        children.add(dinhKe);
+                        child.add(dinhKe);
                         ttKe += dinhKe.tenDinh + "-" + dinhKe.heuristic + " ";
                     }
                 }
