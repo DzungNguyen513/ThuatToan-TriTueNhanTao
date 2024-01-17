@@ -13,7 +13,7 @@ public class Main_typeChar {
 		Scanner sc  = new Scanner(System.in);
 		int lc = 0;
 		do {
-			System.out.println("------------------MENU-------------------");
+			System.out.println("------------------MENU--------------------");
 			System.out.println("|1. BFS theo đường đi từ 1 đỉnh cho trước|");
 			System.out.println("|2. BFS tìm đường đi đến 1 đỉnh bất kì   |");
 			System.out.println("|3. Best First Search                    |");
