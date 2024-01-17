@@ -7,14 +7,12 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class A_sao {
-
     public int n, m;
     public ArrayList<EdgeWeight>[] adj;
     public boolean[] visited;
     public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\input.txt";
     public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt";
 
-    
     public A_sao() {
     }
 
@@ -42,6 +40,7 @@ public class A_sao {
                 int cost = Integer.parseInt(tokens[4]);
                 adj[source - 'A'].add(new EdgeWeight(target, cost));
             }
+            br.close();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,17 +57,19 @@ public class A_sao {
         parent.put(start, null);
         gCosts.put(start, 0);
 
-        System.out.printf("%-5s %-5s %-5s  %-5s  %-5s  %-5s   %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
+        System.out.println("=============================================================================");
+        System.out.printf("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
+        System.out.println("=============================================================================");
 
         while (!priorityQueue.isEmpty()) {
             NodeWeight current = priorityQueue.poll();
             char currentName = current.tenDinh;
 
             if (currentName == goal) {
-            	System.out.println(current.tenDinh + "      Trạng thái kết thúc");
-                System.out.println("Found " + currentName+" !");
+            	System.out.println(current.tenDinh + "     | Trạng thái kết thúc");
+                System.out.println("=> Found " + currentName+" !");
                 printPath(parent, goal);
-                break;
+                return;
             }
 
             if (!visited[currentName - 'A']) {
@@ -87,12 +88,13 @@ public class A_sao {
                         gCosts.put(neighborName, newGCost);
                         hCosts.put(neighborName, heuristic);
                         
-                        System.out.printf("%-5s  %-5s  %-5s  %-5s  %-5s  %-5s  %-30s\n",
+                        System.out.printf("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
                                 currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
                     }
                 }
             }
         }
+        System.out.println("Not Found " + goal+ " !");
     }
 
     private int heuristic(char node, char goal) {
@@ -111,18 +113,25 @@ public class A_sao {
     }
 
     private void printPath(Map<Character, Character> parent, char goal) {
-        List<Character> path = new ArrayList<>();
+    	List<Character> path = new ArrayList<>();
         Character current = goal;
-        int totalCost = 0;
         while (current != null) {
             path.add(current);
             current = parent.get(current);
         }
         Collections.reverse(path);
-        System.out.println("=> " + path);
-        System.out.println("Độ dài: " + calculateTotalCost(path));
+        
+        System.out.print("=> Đường đi: ");
+        for (int i = 0; i < path.size(); i++) {
+            System.out.print(path.get(i));
+            if (i < path.size() - 1) {
+                System.out.print("->");
+            }
+        }
+        System.out.println();
+        System.out.println("=> Độ dài ngắn nhất: " + tinhKC(path));
     }
-    private int calculateTotalCost(List<Character> path) {
+    private int tinhKC(List<Character> path) {
         int totalCost = 0;
 
         for (int i = 0; i < path.size() - 1; i++) {
@@ -138,14 +147,6 @@ public class A_sao {
         }
 
         return totalCost;
-    }
-    public static void main(String[] args) {
-    	A_sao aStar = new A_sao();
-        aStar.input();
-
-        char startNode = 'A';
-        char goalNode = 'B';
-        aStar.aStar(startNode, goalNode);
     }
 }
 

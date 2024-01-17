@@ -39,10 +39,14 @@ public class Main_typeChar {
 				BestFirstSearch bfs = new BestFirstSearch();
 				bfs.input();
 				System.out.print("Nhập đỉnh bạn muốn tìm: ");
-				char goal = sc.next().charAt(0);
-				bfs.bestFirstSearch('A', goal);	        
+				char v = sc.next().charAt(0);
+				bfs.bestFirstSearch('A', v);	        
 	        } else if(lc == 4) {
-	        	
+	        	A_sao aStar = new A_sao();
+	            aStar.input();
+	            System.out.print("Nhập đỉnh bạn muốn tìm: ");
+	            char v = sc.next().charAt(0);
+	            aStar.aStar('A', v);
 	        } else if(lc == 5) {
 	        	break;
 	        }
