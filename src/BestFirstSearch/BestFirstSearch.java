@@ -59,8 +59,8 @@ public class BestFirstSearch {
 
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
-        System.out.println("Phat trien trang thai\tTrang thai ke\t\t\tDanh sach L");
-        writer.write("Phat trien trang thai\tTrang thai ke\t\t\tDanh sach L"+ System.lineSeparator());
+        System.out.println("Phat trien trang thai\t Trang thai ke\t\t\t Danh sach L");
+        writer.write("Phat trien trang thai\t Trang thai ke\t\t\tn Danh sach L"+ System.lineSeparator());
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
 
@@ -99,12 +99,18 @@ public class BestFirstSearch {
                     }
                 }
             }
-
-            System.out.print(ttKe);
-            writer.write(ttKe);
-            outLine = "\t\t\t| ";
-            System.out.print(outLine);
-            writer.write(outLine);
+            if (ttKe.isEmpty()) {
+            	ttKe = "| ";
+                int padding = 32 - ttKe.length(); 
+                System.out.print(String.format("%-" + padding + "s%s", " ", ttKe));
+                writer.write(String.format("%-" + padding + "s%s", " ", ttKe));
+            } else {
+                System.out.print(ttKe);
+                writer.write(ttKe);
+                outLine = "\t\t\t| ";
+                System.out.print(outLine);
+                writer.write(outLine);
+            }
             PriorityQueue<Node> sortedQueue = new PriorityQueue<>(q);
             while (!sortedQueue.isEmpty()) {
                 Node node = sortedQueue.poll();

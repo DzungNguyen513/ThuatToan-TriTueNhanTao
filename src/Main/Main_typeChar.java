@@ -36,16 +36,11 @@ public class Main_typeChar {
 	        	b.BFS_TimDinh(v);
 	        	System.out.println();
 	        } else if(lc == 3) {
-	        	BestFirstSearch bfs = new BestFirstSearch();
-	            try {
-	                bfs.input();	             
-	                System.out.print("Nhập đỉnh bạn muốn tìm: ");
-	                char goal = sc.next().charAt(0);
-	                bfs.bestFirstSearch('A', goal);
-	            } finally {
-	                
-	            }
-	        	
+				BestFirstSearch bfs = new BestFirstSearch();
+				bfs.input();
+				System.out.print("Nhập đỉnh bạn muốn tìm: ");
+				char goal = sc.next().charAt(0);
+				bfs.bestFirstSearch('A', goal);	        
 	        } else if(lc == 4) {
 	        	
 	        } else if(lc == 5) {
