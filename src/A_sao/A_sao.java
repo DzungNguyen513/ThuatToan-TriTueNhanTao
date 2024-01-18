@@ -2,6 +2,7 @@ package A_sao;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -11,9 +12,15 @@ public class A_sao {
     public ArrayList<EdgeWeight>[] adj;
     public boolean[] visited;
     public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\input.txt";
-    public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt";
-
+    public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\output.txt";
+    public FileWriter writer;
+   
     public A_sao() {
+        try {
+            writer = new FileWriter(outPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void input() {
@@ -48,53 +55,77 @@ public class A_sao {
     }
 
     public void aStar(char start, char goal) {
-        PriorityQueue<NodeWeight> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.fCost));
-        Map<Character, Character> parent = new HashMap<>();
-        Map<Character, Integer> gCosts = new HashMap<>();
-        Map<Character, Integer> hCosts = new HashMap<>();
+    	try {
+    		PriorityQueue<NodeWeight> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.fCost));
+            Map<Character, Character> parent = new HashMap<>();
+            Map<Character, Integer> gCosts = new HashMap<>();
+            Map<Character, Integer> hCosts = new HashMap<>();
 
-        priorityQueue.add(new NodeWeight(start, 0, heuristic(start, goal), 0));
-        parent.put(start, null);
-        gCosts.put(start, 0);
+            priorityQueue.add(new NodeWeight(start, 0, heuristic(start, goal), 0));
+            parent.put(start, null);
+            gCosts.put(start, 0);
 
-        System.out.println("=============================================================================");
-        System.out.printf("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
-        System.out.println("=============================================================================");
+            System.out.println("=============================================================================");
+            writer.write("=============================================================================" + System.lineSeparator());
 
-        while (!priorityQueue.isEmpty()) {
-            NodeWeight current = priorityQueue.poll();
-            char currentName = current.tenDinh;
+            System.out.printf("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
+            String header = String.format("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
+            writer.write(header);
+            System.out.println("=============================================================================");
+            writer.write("=============================================================================" + System.lineSeparator());
 
-            if (currentName == goal) {
-            	System.out.println(current.tenDinh + "     | Trạng thái kết thúc");
-                System.out.println("=> Found " + currentName+" !");
-                printPath(parent, goal);
-                return;
-            }
+            while (!priorityQueue.isEmpty()) {
+                NodeWeight current = priorityQueue.poll();
+                char currentName = current.tenDinh;
 
-            if (!visited[currentName - 'A']) {
-                visited[currentName - 'A'] = true;
+                if (currentName == goal) {
+                	System.out.println(current.tenDinh + "     | Trạng thái kết thúc");
+                    writer.write(current.tenDinh + "     | Trạng thái kết thúc" +System.lineSeparator());
 
-                for (EdgeWeight edge : adj[currentName - 'A']) {
-                    char neighborName = edge.dinhDen;
-                    int newGCost = gCosts.get(currentName) + edge.cost;
+                    System.out.println("=> Found " + currentName+" !");
+                    writer.write("=> Found " + currentName+" !" +System.lineSeparator());
+                    printPath(parent, goal);
+                    return;
+                }
 
-                    if (!visited[neighborName - 'A'] || newGCost < gCosts.getOrDefault(neighborName, Integer.MAX_VALUE)) {
-                        int heuristic = heuristic(neighborName, goal);
-                        int fCost = newGCost + heuristic;
+                if (!visited[currentName - 'A']) {
+                    visited[currentName - 'A'] = true;
 
-                        priorityQueue.add(new NodeWeight(neighborName, newGCost, heuristic, fCost));
-                        parent.put(neighborName, currentName);
-                        gCosts.put(neighborName, newGCost);
-                        hCosts.put(neighborName, heuristic);
-                        
-                        System.out.printf("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
-                                currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                    for (EdgeWeight edge : adj[currentName - 'A']) {
+                        char neighborName = edge.dinhDen;
+                        int newGCost = gCosts.get(currentName) + edge.cost;
+
+                        if (!visited[neighborName - 'A'] || newGCost < gCosts.getOrDefault(neighborName, Integer.MAX_VALUE)) {
+                            int heuristic = heuristic(neighborName, goal);
+                            int fCost = newGCost + heuristic;
+
+                            priorityQueue.add(new NodeWeight(neighborName, newGCost, heuristic, fCost));
+                            parent.put(neighborName, currentName);
+                            gCosts.put(neighborName, newGCost);
+                            hCosts.put(neighborName, heuristic);
+                            
+                            System.out.printf("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
+                                    currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                            String line = String.format("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
+                                    currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                            writer.write(line);
+                        }
                     }
                 }
             }
+            System.out.println("Not Found " + goal+ " !");
+            writer.write("Not Found " + goal+ " !" +System.lineSeparator());
+
+    	}catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println("Not Found " + goal+ " !");
+        
     }
 
     private int heuristic(char node, char goal) {
@@ -113,23 +144,39 @@ public class A_sao {
     }
 
     private void printPath(Map<Character, Character> parent, char goal) {
-    	List<Character> path = new ArrayList<>();
-        Character current = goal;
-        while (current != null) {
-            path.add(current);
-            current = parent.get(current);
-        }
-        Collections.reverse(path);
-        
-        System.out.print("=> Đường đi: ");
-        for (int i = 0; i < path.size(); i++) {
-            System.out.print(path.get(i));
-            if (i < path.size() - 1) {
-                System.out.print("->");
+    	
+    	try {
+    		List<Character> path = new ArrayList<>();
+            Character current = goal;
+            while (current != null) {
+                path.add(current);
+                current = parent.get(current);
             }
+            Collections.reverse(path);
+            
+            System.out.print("=> Đường đi: ");
+            writer.write("=> Đường đi: ");
+
+            for (int i = 0; i < path.size(); i++) {
+                System.out.print(path.get(i));
+                writer.write(path.get(i));
+
+                if (i < path.size() - 1) {
+                    System.out.print("->");
+                    writer.write("->");
+
+                }
+            }
+            System.out.println();
+            writer.write(System.lineSeparator());
+
+            System.out.println("=> Độ dài ngắn nhất: " + tinhKC(path));
+            writer.write("=> Độ dài ngắn nhất: " + tinhKC(path)+System.lineSeparator());
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println();
-        System.out.println("=> Độ dài ngắn nhất: " + tinhKC(path));
+    	
     }
     private int tinhKC(List<Character> p) {
         int kc = 0;
