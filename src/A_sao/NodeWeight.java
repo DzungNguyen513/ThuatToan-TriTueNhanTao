@@ -1,21 +1,19 @@
 package A_sao;
 
-import java.nio.charset.Charset;
-
 public class NodeWeight{
     char tenDinh;
-    int gCost; 
-    int hCost; 
-    int fCost;
+    int g; 
+    int h; 
+    int f;
 
-    public NodeWeight(char tenDinh, int gCost, int hCost, int fCost) {
+    public NodeWeight(char tenDinh, int g, int h, int f) {
         this.tenDinh = tenDinh;
-        this.gCost = gCost;
-        this.hCost = hCost;
-        this.fCost = fCost;
+        this.g = g;
+        this.h = h;
+        this.f = f;
     }
     @Override
     public String toString() {
-        return tenDinh + "-" + fCost;
+        return tenDinh + "-" + f;
     }
 }

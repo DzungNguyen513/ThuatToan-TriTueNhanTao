@@ -46,7 +46,7 @@ public class Main_typeChar {
 	            a.input();
 	            System.out.print("Nhập đỉnh bạn muốn tìm: ");
 	            char v = sc.next().charAt(0);
-	            a.aStar('A', v);
+	            a.Asao('A', v);
 	        } else if(lc == 5) {
 	        	break;
 	        }

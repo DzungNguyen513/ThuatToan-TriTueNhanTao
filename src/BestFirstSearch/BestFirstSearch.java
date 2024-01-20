@@ -161,7 +161,6 @@ public class BestFirstSearch {
         writer.write("=> " + duongDiStr.toString() + System.lineSeparator());
         writer.flush();
     }
-
 }
 
 

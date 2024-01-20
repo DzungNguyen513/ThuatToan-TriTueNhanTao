@@ -42,10 +42,10 @@ public class A_sao {
             for (int i = 0; i < m; i++) {
                 line = br.readLine();
                 tokens = line.split(" ");
-                char source = tokens[0].charAt(0);
-                char target = tokens[2].charAt(0);
-                int cost = Integer.parseInt(tokens[4]);
-                adj[source - 'A'].add(new EdgeWeight(target, cost));
+                char s = tokens[0].charAt(0);
+                char sKe = tokens[2].charAt(0);
+                int k = Integer.parseInt(tokens[4]);
+                adj[s - 'A'].add(new EdgeWeight(sKe, k));
             }
             br.close();
 
@@ -54,16 +54,16 @@ public class A_sao {
         }
     }
 
-    public void aStar(char start, char goal) {
+    public void Asao(char a, char b) {
     	try {
-    		PriorityQueue<NodeWeight> priorityQueue = new PriorityQueue<>(Comparator.comparingInt(node -> node.fCost));
-            Map<Character, Character> parent = new HashMap<>();
+    		PriorityQueue<NodeWeight> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
+            Map<Character, Character> parent = new HashMap<>(); // Lưu trữ thông tin đỉnh cha
             Map<Character, Integer> gCosts = new HashMap<>();
             Map<Character, Integer> hCosts = new HashMap<>();
 
-            priorityQueue.add(new NodeWeight(start, 0, heuristic(start, goal), 0));
-            parent.put(start, null);
-            gCosts.put(start, 0);
+            PQ.add(new NodeWeight(a, 0, heuristic(a, b), 0));
+            parent.put(a, null);
+            gCosts.put(a, 0);
 
             System.out.println("=============================================================================");
             writer.write("=============================================================================" + System.lineSeparator());
@@ -74,47 +74,49 @@ public class A_sao {
             System.out.println("=============================================================================");
             writer.write("=============================================================================" + System.lineSeparator());
 
-            while (!priorityQueue.isEmpty()) {
-                NodeWeight current = priorityQueue.poll();
-                char currentName = current.tenDinh;
+            while (!PQ.isEmpty()) {
+                NodeWeight x = PQ.poll(); // Đỉnh đầu của PQ
+                char xName = x.tenDinh;
 
-                if (currentName == goal) {
-                	System.out.println(current.tenDinh + "     | Trạng thái kết thúc");
-                    writer.write(current.tenDinh + "     | Trạng thái kết thúc" +System.lineSeparator());
+                if (xName == b) {
+                	System.out.println(x.tenDinh + "     | Trạng thái kết thúc");
+                    writer.write(x.tenDinh + "     | Trạng thái kết thúc" +System.lineSeparator());
 
-                    System.out.println("=> Found " + currentName+" !");
-                    writer.write("=> Found " + currentName+" !" +System.lineSeparator());
-                    printPath(parent, goal);
+                    System.out.println("=> Found " + xName+" !");
+                    writer.write("=> Found " + xName+" !" +System.lineSeparator());
+                    inDuongDi(parent, b);
                     return;
                 }
 
-                if (!visited[currentName - 'A']) {
-                    visited[currentName - 'A'] = true;
+                if (!visited[xName - 'A']) {
+                    visited[xName - 'A'] = true;
 
-                    for (EdgeWeight edge : adj[currentName - 'A']) {
-                        char neighborName = edge.dinhDen;
-                        int newGCost = gCosts.get(currentName) + edge.cost;
+                    for (EdgeWeight edge : adj[xName - 'A']) { // Xử lý đỉnh kề
+                        char xDen = edge.dinhDen;
+                        int newGCost = gCosts.get(xName) + edge.cost;
 
-                        if (!visited[neighborName - 'A'] || newGCost < gCosts.getOrDefault(neighborName, Integer.MAX_VALUE)) {
-                            int heuristic = heuristic(neighborName, goal);
+                        if (!visited[xDen - 'A'] || newGCost < gCosts.getOrDefault(xDen, Integer.MAX_VALUE)) {
+                            int heuristic = heuristic(xDen, b);
                             int fCost = newGCost + heuristic;
 
-                            priorityQueue.add(new NodeWeight(neighborName, newGCost, heuristic, fCost));
-                            parent.put(neighborName, currentName);
-                            gCosts.put(neighborName, newGCost);
-                            hCosts.put(neighborName, heuristic);
-                            
+                            PQ.add(new NodeWeight(xDen, newGCost, heuristic, fCost));
+                            parent.put(xDen, xName);
+                            gCosts.put(xDen, newGCost);
+                            hCosts.put(xDen, heuristic);
+                            List<NodeWeight> sapXep = new ArrayList<>(PQ);
+                            Collections.sort(sapXep, Comparator.comparingInt(node -> node.f));
+
                             System.out.printf("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
-                                    currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                            		xName, xDen, edge.cost, heuristic, newGCost, fCost, sapXep);
                             String line = String.format("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
-                                    currentName, neighborName, edge.cost, heuristic, newGCost, fCost, priorityQueue);
+                            		xName, xDen, edge.cost, heuristic, newGCost, fCost, sapXep);
                             writer.write(line);
                         }
                     }
                 }
             }
-            System.out.println("Not Found " + goal+ " !");
-            writer.write("Not Found " + goal+ " !" +System.lineSeparator());
+            System.out.println("Not Found " + b+ " !");
+            writer.write("Not Found " + b+ " !" +System.lineSeparator());
 
     	}catch (IOException e) {
             e.printStackTrace();
@@ -143,14 +145,14 @@ public class A_sao {
         return hm.getOrDefault(node, Integer.MAX_VALUE);
     }
 
-    private void printPath(Map<Character, Character> parent, char goal) {
+    private void inDuongDi(Map<Character, Character> parent, char goal) {
     	
     	try {
     		List<Character> path = new ArrayList<>();
-            Character current = goal;
-            while (current != null) {
-                path.add(current);
-                current = parent.get(current);
+            Character xName = goal;
+            while (xName != null) {
+                path.add(xName);
+                xName = parent.get(xName);
             }
             Collections.reverse(path);
             
@@ -182,11 +184,11 @@ public class A_sao {
         int kc = 0;
 
         for (int i = 0; i < p.size() - 1; i++) {
-            char current = p.get(i);
-            char next = p.get(i + 1);
+            char x = p.get(i);
+            char xNext = p.get(i + 1);
 
-            for (EdgeWeight edge : adj[current - 'A']) {
-                if (edge.dinhDen == next) {
+            for (EdgeWeight edge : adj[x - 'A']) {
+                if (edge.dinhDen == xNext) {
                 	kc += edge.cost;
                     break;
                 }
