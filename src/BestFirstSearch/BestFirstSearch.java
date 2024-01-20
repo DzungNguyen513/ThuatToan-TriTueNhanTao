@@ -111,9 +111,9 @@ public class BestFirstSearch {
                 System.out.print(outLine);
                 writer.write(outLine);
             }
-            PriorityQueue<Node> sortedQueue = new PriorityQueue<>(q);
-            while (!sortedQueue.isEmpty()) {
-                Node node = sortedQueue.poll();
+            PriorityQueue<Node> sapXep = new PriorityQueue<>(q);
+            while (!sapXep.isEmpty()) {
+                Node node = sapXep.poll();
                 outLine = node.tenDinh + "-" + node.heuristic + " ";
                 System.out.print(outLine);
                 writer.write(outLine);
