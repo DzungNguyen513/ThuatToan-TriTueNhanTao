@@ -59,8 +59,8 @@ public class BestFirstSearch {
 
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
-        System.out.println("Phat trien trang thai\t Trang thai ke\t\t\t Danh sach L");
-        writer.write("Phat trien trang thai\t Trang thai ke\t\t\t Danh sach L"+ System.lineSeparator());
+        System.out.println("Phat trien trang thai\t|Trang thai ke\t\t\t|Danh sach L");
+        writer.write("Phat trien trang thai\t|Trang thai ke\t\t\t|Danh sach L"+ System.lineSeparator());
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
 
