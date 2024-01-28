@@ -1,4 +1,4 @@
-Thuật toán Trí tuệ Nhân tạo 
+Thuật toán Trí tuệ Nhân tạo:
 - BFS
 - BestFirstSearch
 - A*
