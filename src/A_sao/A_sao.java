@@ -54,7 +54,7 @@ public class A_sao {
         }
     }
 
-    public void Asao(char a, char b) {
+    public void aSao(char a, char b) {
     	try {
     		PriorityQueue<NodeWeight> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
             Map<Character, Character> parent = new HashMap<>(); // Lưu trữ thông tin đỉnh cha
