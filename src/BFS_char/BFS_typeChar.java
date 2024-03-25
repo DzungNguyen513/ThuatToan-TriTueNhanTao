@@ -14,7 +14,8 @@ public class BFS_typeChar {
     public int n, m;
     public ArrayList<Character>[] adj;
     public boolean[] visited;
-    public String filePath = "D:\\AI\\BFS_AI\\src\\output.txt";
+    public String filePath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\output.txt";
+
     public FileWriter writer;
 
     public BFS_typeChar() {
@@ -26,8 +27,9 @@ public class BFS_typeChar {
     }
 
     public void input() {
-        try {
-            FileInputStream fis = new FileInputStream("D:\\AI\\BFS_AI\\src\\input2.txt");
+try {
+            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\input.txt");
+
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
@@ -88,10 +90,13 @@ public class BFS_typeChar {
             visited['A' - 'A'] = true;
             path['A' - 'A'] = '\0';
 
+            System.out.println("====================================================================");
+            writer.write("==========================================================================" + System.lineSeparator());
             System.out.println("Phat trien trang thai\tTrang thai ke\t\tDanh Sach L");
             writer.write("Phat trien trang thai\tTrang thai ke\t\tDanh Sach L" + System.lineSeparator());
-            System.out.println("==================================================================================");
-            writer.write("==================================================================================" + System.lineSeparator());
+            System.out.println("====================================================================");
+            writer.write("==========================================================================" + System.lineSeparator());
+
 
             boolean kt = false;
 
