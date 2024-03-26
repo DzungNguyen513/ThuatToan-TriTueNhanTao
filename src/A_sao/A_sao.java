@@ -14,6 +14,8 @@ public class A_sao {
     public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\input.txt";
     public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\output.txt";
     public FileWriter writer;
+    private Map<Character, Integer> heuristicValues = new HashMap<>();
+
    
     public A_sao() {
         try {
@@ -27,6 +29,7 @@ public class A_sao {
         try {
             FileInputStream fis = new FileInputStream(inPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+            
             String line = br.readLine();
             String[] tokens = line.split(" ");
             n = Integer.parseInt(tokens[0]);
@@ -39,25 +42,32 @@ public class A_sao {
             }
             Arrays.fill(visited, false);
 
+            for (int i = 0; i < n; i++) {
+                line = br.readLine();
+                tokens = line.split(" ");
+                char node = tokens[0].charAt(0);
+                int heuristicValue = Integer.parseInt(tokens[1]);
+                heuristicValues.put(node, heuristicValue);
+            }
             for (int i = 0; i < m; i++) {
                 line = br.readLine();
                 tokens = line.split(" ");
-                char s = tokens[0].charAt(0);
-                char sKe = tokens[2].charAt(0);
-                int k = Integer.parseInt(tokens[4]);
-                adj[s - 'A'].add(new EdgeWeight(sKe, k));
+                char from = tokens[0].charAt(0);
+                char to = tokens[1].charAt(0);
+                int weight = Integer.parseInt(tokens[2]);
+                adj[from - 'A'].add(new EdgeWeight(to, weight));
             }
             br.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
     public void aSao(char a, char b) {
     	try {
     		PriorityQueue<NodeWeight> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
-            Map<Character, Character> parent = new HashMap<>(); // Lưu trữ thông tin đỉnh cha
+            Map<Character, Character> parent = new HashMap<>(); 
             Map<Character, Integer> gCosts = new HashMap<>();
             Map<Character, Integer> hCosts = new HashMap<>();
 
@@ -131,18 +141,7 @@ public class A_sao {
     }
 
     private int heuristic(char node, char goal) {
-        Map<Character, Integer> hm = new HashMap<>();
-        hm.put('A', 14);
-        hm.put('B', 0);
-        hm.put('C', 15);
-        hm.put('D', 6);
-        hm.put('E', 8);
-        hm.put('F', 7);
-        hm.put('G', 12);
-        hm.put('H', 10);
-        hm.put('I', 4);
-        hm.put('K', 2);
-        return hm.getOrDefault(node, Integer.MAX_VALUE);
+        return heuristicValues.getOrDefault(node, Integer.MAX_VALUE);
     }
 
     private void inDuongDi(Map<Character, Character> parent, char goal) {
@@ -178,8 +177,8 @@ public class A_sao {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    	
     }
+    
     private int tinhKC(List<Character> p) {
         int kc = 0;
 
@@ -194,7 +193,6 @@ public class A_sao {
                 }
             }
         }
-
         return kc;
     }
 }
