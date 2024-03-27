@@ -12,14 +12,15 @@ import java.util.Queue;
 
 public class BFS_typeChar {
     public int n, m;
-    public ArrayList<Character>[] adj;
-    public boolean[] visited;
-    public String filePath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\output.txt";
+    public ArrayList<Character>[] adj; // Đánh dấu đường đi
+    public boolean[] visited; // Đánh dấu các đỉnh đã thăm
+    public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\input.txt";
+    public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\output.txt"; // đường dẫn file output
     public FileWriter writer;
 
     public BFS_typeChar() {
         try {
-            writer = new FileWriter(filePath);
+            writer = new FileWriter(outPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class BFS_typeChar {
 
     public void input() {
         try {
-            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS_char\\input.txt");
+            FileInputStream fis = new FileInputStream(inPath);
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
@@ -37,7 +38,7 @@ public class BFS_typeChar {
             visited = new boolean[1001];
 
             for (int i = 0; i < n; i++) {
-                adj[i] = new ArrayList<>();
+                adj[i] = new ArrayList<>(); // Khởi mảng adj với n đỉnh
             }
             Arrays.fill(visited, false);
 
