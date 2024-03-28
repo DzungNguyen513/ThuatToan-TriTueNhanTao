@@ -1,11 +1,9 @@
 package BestFirstSearch;
 
 public class Edge {
-	char dinhDen;
-    int cost;
+    public char destination;
 
-    public Edge(char dinhDen, int chiPhiCanh) {
-        this.dinhDen = dinhDen;
-        this.cost = chiPhiCanh;
+    public Edge(char destination) {
+        this.destination = destination;
     }
 }

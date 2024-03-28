@@ -1,12 +1,16 @@
 package BestFirstSearch;
 
-public class Node {
-	char tenDinh;
-    int cost;
-    int heuristic; 
-    public Node(char tenDinh, int chiPhiDinh, int kt) {
-        this.tenDinh = tenDinh;
-        this.cost = chiPhiDinh;
-        this.heuristic = kt;
+public class Node implements Comparable<Node> {
+    public char dinh;
+    public int heuristic;
+
+    public Node(char dinh, int heuristic) {
+        this.dinh = dinh;
+        this.heuristic = heuristic;
+    }
+
+    @Override
+    public int compareTo(Node other) {
+        return Integer.compare(this.heuristic, other.heuristic);
     }
 }
