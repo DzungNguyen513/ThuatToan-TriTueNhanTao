@@ -6,8 +6,8 @@ import java.util.*;
 
 public class BestFirstSearch {
     private int n, m;
-    private ArrayList<Edge>[] adj;
-    private Map<Character, Integer> hm = new HashMap<>();
+    private Map<String, List<Edge>> adj = new HashMap<>();
+    private Map<String, Integer> hm = new HashMap<>();
     private String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\input.txt"; // Đường dẫn tới file input
     private String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt"; // Đường dẫn tới file output
     public FileWriter writer;
@@ -26,35 +26,31 @@ public class BestFirstSearch {
         String[] tokens = line.split(" ");
         n = Integer.parseInt(tokens[0]);
         m = Integer.parseInt(tokens[1]);
-        adj = new ArrayList[26];
-
-        for (int i = 0; i < 26; i++) {
-            adj[i] = new ArrayList<>();
-        }
 
         for (int i = 0; i < n; i++) {
             line = br.readLine();
             tokens = line.split(" ");
-            char node = tokens[0].charAt(0);
+            String node = tokens[0].toString();
             int heuristicValue = Integer.parseInt(tokens[1]);
             hm.put(node, heuristicValue);
+            adj.put(node, new ArrayList<>());
         }
 
         for (int i = 0; i < m; i++) {
             line = br.readLine();
             tokens = line.split(" ");
-            char from = tokens[0].charAt(0);
-            char to = tokens[1].charAt(0);
-            adj[from - 'A'].add(new Edge(to));
+            String from = tokens[0].toString();
+            String to = tokens[1].toString();
+            adj.get(from).add(new Edge(to));
         }
 
         br.close();
     }
 
-    public void bestFirstSearch(char start, char goal) throws IOException {        
+    public void bestFirstSearch(String start, String goal) throws IOException {        
         PriorityQueue<Node> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.heuristic));
-        Map<Character, Character> duongDi = new HashMap<>();
-        Set<Character> set = new HashSet<>();
+        Map<String, String> duongDi = new HashMap<>();
+        Set<String> set = new HashSet<>();
         
         PQ.add(new Node(start, hm.getOrDefault(start, 0)));
         duongDi.put(start, null);
@@ -73,7 +69,7 @@ public class BestFirstSearch {
         while (!PQ.isEmpty() && !kt) {
             Node dinhHienTai = PQ.poll();
 
-            if (dinhHienTai.dinh == goal) {
+            if (dinhHienTai.dinh.equals(goal)) {
                 kt = true;
                 break;
             }
@@ -82,17 +78,20 @@ public class BestFirstSearch {
 
             String ttKe = "";
             // Duyệt qua các đỉnh kề
-            for (Edge edge : adj[dinhHienTai.dinh - 'A']) {
-                char dinhKe = edge.dinhDen;
-                if (!set.contains(dinhKe) && !duongDi.containsKey(dinhKe)) {
-                    int nextHeuristic = hm.getOrDefault(dinhKe, 0);
-                    Node dinhTiepTheo = new Node(dinhKe, nextHeuristic);
-                    PQ.add(dinhTiepTheo);
-                    duongDi.put(dinhKe, dinhHienTai.dinh);
-                    ttKe += dinhKe + "-" + nextHeuristic + " ";
+            List<Edge> edges = adj.get(dinhHienTai.dinh); // Truy cập bằng key kiểu String
+            if (edges != null) {
+                for (Edge edge : edges) {
+                    String dinhKe = edge.dinhDen;
+                    if (!set.contains(dinhKe) && !duongDi.containsKey(dinhKe)) {
+                        int nextHeuristic = hm.getOrDefault(dinhKe, 0);
+                        Node dinhTiepTheo = new Node(dinhKe, nextHeuristic);
+                        PQ.add(dinhTiepTheo);
+                        duongDi.put(dinhKe, dinhHienTai.dinh);
+                        ttKe += dinhKe + "-" + nextHeuristic + " ";
+                    }
                 }
             }
-
+            
             // In danh sách L
             String dsL = "";
             List<Node> sapXepPQ = new ArrayList<>(PQ);
@@ -121,9 +120,9 @@ public class BestFirstSearch {
 
         writer.close();
     }
-    private void inDuongDi(Map<Character, Character> path, char start, char goal) throws IOException {
-        List<Character> duongDi = new ArrayList<>();
-        Character v = goal;
+    private void inDuongDi(Map<String, String> path, String start, String goal) throws IOException {
+        List<String> duongDi = new ArrayList<>();
+        String v = goal;
         while (v != null) {
             duongDi.add(v);
             v = path.get(v);

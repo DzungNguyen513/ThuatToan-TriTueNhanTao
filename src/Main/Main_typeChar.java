@@ -39,8 +39,8 @@ public class Main_typeChar {
 				BestFirstSearch bfs = new BestFirstSearch();
 				bfs.input();
 				System.out.print("Nhập đỉnh bạn muốn tìm: ");
-				char v = sc.next().charAt(0);
-				bfs.bestFirstSearch('A', v);	        
+				String v = sc.next().toString();
+				bfs.bestFirstSearch("A", v);	        
 	        } else if(lc == 4) {
 	        	A_sao a = new A_sao();
 	            a.input();
