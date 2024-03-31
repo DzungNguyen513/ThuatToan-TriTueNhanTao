@@ -1,6 +1,6 @@
 10 14
 A 20
-B1 0
+B 0
 C 15
 D 6
 E 7
@@ -17,9 +17,9 @@ D F
 D I
 E G
 E K
-F B1
-I B1
+F B
+I B
 I G
-G B1
+G B
 G H
-H B1
+H B
