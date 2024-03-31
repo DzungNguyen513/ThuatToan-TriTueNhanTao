@@ -1,9 +1,9 @@
 package BestFirstSearch;
 
 public class Edge {
-    public char dinhDen;
+    public String dinhDen;
 
-    public Edge(char dinhDen) {
+    public Edge(String dinhDen) {
         this.dinhDen = dinhDen;
     }
 }

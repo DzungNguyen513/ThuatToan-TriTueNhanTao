@@ -16,7 +16,7 @@ public class BFS_AI {
     
     public void input() {
     	try {
-            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\input.txt");
+            FileInputStream fis = new FileInputStream("D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BFS\\input.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(fis));
             String line = br.readLine();
             String[] tokens = line.split(" ");
@@ -90,5 +90,4 @@ public class BFS_AI {
         printPath(path, path[j]); // Đệ quy
         System.out.print(j + " ");
     }
-
 }

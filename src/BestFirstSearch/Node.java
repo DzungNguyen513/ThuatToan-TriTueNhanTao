@@ -1,10 +1,10 @@
 package BestFirstSearch;
 
 public class Node implements Comparable<Node> {
-    public char dinh;
+    public String dinh;
     public int heuristic;
 
-    public Node(char dinh, int heuristic) {
+    public Node(String dinh, int heuristic) {
         this.dinh = dinh;
         this.heuristic = heuristic;
     }
