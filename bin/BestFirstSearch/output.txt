@@ -9,6 +9,6 @@ B1-0                      |                           | H-3 I-8 F-10 K-12 C-15
 H-3                       |                           | I-8 F-10 K-12 C-15       
 I-8                       |                           | F-10 K-12 C-15           
 F-10                      |                           | K-12 C-15                
-K-12                      |                           | C-15                     
-C-15                      |                           |                          
-Không có đường đi từ A tới T !
+K-12                      | Trạng thái kết thúc      
+Found K !
+=> Đường đi: A->E->K
