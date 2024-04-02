@@ -8,8 +8,8 @@ public class BestFirstSearch {
     private int n, m;
     private Map<String, List<Edge>> adj = new HashMap<>();
     private Map<String, Integer> hm = new HashMap<>();
-    private String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\input2.txt"; // Đường dẫn tới file input
-    private String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt"; // Đường dẫn tới file output
+    private String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\input1.txt"; 
+    private String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt"; 
     public FileWriter writer;
 
     public BestFirstSearch() {
@@ -19,58 +19,58 @@ public class BestFirstSearch {
             e.printStackTrace();
         }
     }
-//    public void input() throws IOException {
-//        FileInputStream fis = new FileInputStream(inPath);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-//        
-//        String line = br.readLine();
-//        String[] tokens = line.split(" ");
-//        n = Integer.parseInt(tokens[0].toString());
-//        m = Integer.parseInt(tokens[1].toString());
-//        for(int i = 0; i < n; i++) {
-//        	line = br.readLine();
-//        	tokens = line.split(" ");
-//        	String dinh = tokens[0].toString();
-//        	int heuristicValue = Integer.parseInt(tokens[1].toString());
-//        	hm.put(dinh, heuristicValue);
-//        	adj.put(dinh, new ArrayList<>());
-//        }
-//        for(int i = 0; i < m; i++) {
-//        	line = br.readLine();
-//        	tokens = line.split(" ");
-//        	String from = tokens[0].toString();
-//        	String to = tokens[1].toString();
-//        	adj.get(from).add(new Edge(to));
-//        }
-//        
-//        br.close();     
-//    }
     public void input() throws IOException {
         FileInputStream fis = new FileInputStream(inPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
         
-        int n = Integer.parseInt(br.readLine().trim());
-        for (int i = 0; i < n; i++) {
-            String line = br.readLine();
-            String[] tokens = line.split(" ");
-            String dinh = tokens[0];
-            int heuristicValue = Integer.parseInt(tokens[1]);
-            hm.put(dinh, heuristicValue);
-            adj.put(dinh, new ArrayList<>());
+        String line = br.readLine();
+        String[] tokens = line.split(" ");
+        n = Integer.parseInt(tokens[0].toString());
+        m = Integer.parseInt(tokens[1].toString());
+        for(int i = 0; i < n; i++) {
+        	line = br.readLine();
+        	tokens = line.split(" ");
+        	String dinh = tokens[0].toString();
+        	int heuristicValue = Integer.parseInt(tokens[1].toString());
+        	hm.put(dinh, heuristicValue);
+        	adj.put(dinh, new ArrayList<>());
         }
-
-        String line;
-        while((line = br.readLine()) != null && !line.isEmpty()) {
-        	String[] tokens = line.split(" ");
+        for(int i = 0; i < m; i++) {
+        	line = br.readLine();
+        	tokens = line.split(" ");
         	String from = tokens[0].toString();
-        	for(int i = 1; i < tokens.length;i++) {
-        		String to = tokens[i].toString();
-        		adj.get(from).add(new Edge(to));
-        	}
+        	String to = tokens[1].toString();
+        	adj.get(from).add(new Edge(to));
         }
-
-        br.close();
+        
+        br.close();     
     }
+//    public void input() throws IOException {
+//        FileInputStream fis = new FileInputStream(inPath);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+//        
+//        int n = Integer.parseInt(br.readLine().trim());
+//        for (int i = 0; i < n; i++) {
+//            String line = br.readLine();
+//            String[] tokens = line.split(" ");
+//            String dinh = tokens[0];
+//            int heuristicValue = Integer.parseInt(tokens[1]);
+//            hm.put(dinh, heuristicValue);
+//            adj.put(dinh, new ArrayList<>());
+//        }
+//
+//        String line;
+//        while((line = br.readLine()) != null && !line.isEmpty()) {
+//        	String[] tokens = line.split(" ");
+//        	String from = tokens[0].toString();
+//        	for(int i = 1; i < tokens.length;i++) {
+//        		String to = tokens[i].toString();
+//        		adj.get(from).add(new Edge(to));
+//        	}
+//        }
+//
+//        br.close();
+//    }
 
 
     public void bestFirstSearch(String start, String goal) throws IOException {        
