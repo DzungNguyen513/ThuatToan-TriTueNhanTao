@@ -6,10 +6,10 @@ import java.util.*;
 
 public class BestFirstSearch {
     private int n, m;
-    private Map<String, List<Edge>> adj = new HashMap<>();
+    private Map<String, List<String>> adj = new HashMap<>();
     private Map<String, Integer> hm = new HashMap<>();
-    private String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\input2.txt"; // Đường dẫn tới file input
-    private String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt"; // Đường dẫn tới file output
+    private String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\input2.txt"; 
+    private String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\BestFirstSearch\\output.txt"; 
     public FileWriter writer;
 
     public BestFirstSearch() {
@@ -19,70 +19,48 @@ public class BestFirstSearch {
             e.printStackTrace();
         }
     }
-//    public void input() throws IOException {
-//        FileInputStream fis = new FileInputStream(inPath);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
-//        
-//        String line = br.readLine();
-//        String[] tokens = line.split(" ");
-//        n = Integer.parseInt(tokens[0].toString());
-//        m = Integer.parseInt(tokens[1].toString());
-//        for(int i = 0; i < n; i++) {
-//        	line = br.readLine();
-//        	tokens = line.split(" ");
-//        	String dinh = tokens[0].toString();
-//        	int heuristicValue = Integer.parseInt(tokens[1].toString());
-//        	hm.put(dinh, heuristicValue);
-//        	adj.put(dinh, new ArrayList<>());
-//        }
-//        for(int i = 0; i < m; i++) {
-//        	line = br.readLine();
-//        	tokens = line.split(" ");
-//        	String from = tokens[0].toString();
-//        	String to = tokens[1].toString();
-//        	adj.get(from).add(new Edge(to));
-//        }
-//        
-//        br.close();     
-//    }
+
     public void input() throws IOException {
         FileInputStream fis = new FileInputStream(inPath);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
         
-        int n = Integer.parseInt(br.readLine().trim());
+        int n = Integer.parseInt(br.readLine().trim());    
+        
+        String line;
         for (int i = 0; i < n; i++) {
-            String line = br.readLine();
+            line = br.readLine();
             String[] tokens = line.split(" ");
             String dinh = tokens[0];
             int heuristicValue = Integer.parseInt(tokens[1]);
             hm.put(dinh, heuristicValue);
             adj.put(dinh, new ArrayList<>());
         }
-
-        String line;
+        
         while((line = br.readLine()) != null && !line.isEmpty()) {
         	String[] tokens = line.split(" ");
         	String from = tokens[0].toString();
         	for(int i = 1; i < tokens.length;i++) {
         		String to = tokens[i].toString();
-        		adj.get(from).add(new Edge(to));
+        		adj.get(from).add(to);
         	}
+        	
         }
-
         br.close();
     }
 
-
     public void bestFirstSearch(String start, String goal) throws IOException {        
-        PriorityQueue<Node> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.heuristic));
-        Map<String, String> duongDi = new HashMap<>();
-        Set<String> set = new HashSet<>();
+    	PriorityQueue<Node> PQ = new PriorityQueue<>(
+    		Comparator.comparingInt(node -> node.heuristic)
+    	); // Khởi tạo PQ
+        Map<String, String> duongDi = new HashMap<>(); // Khởi tạo Map để lưu trữ đường đi
+                                                       // Key là tên đỉnh, và value là tên đỉnh trước đó trên đường đi từ đỉnh bắt đầu.
+        Set<String> set = new HashSet<>(); // Khởi tạo Set để lưu trữ các đỉnh đã được phát triển
         
-        PQ.add(new Node(start, hm.getOrDefault(start, 0)));
-        duongDi.put(start, null);
+        PQ.add(new Node(start, hm.getOrDefault(start, 0))); // Thêm đỉnh bắt đầu vào PQ và giá trị heuristic
+        duongDi.put(start, null); // Thêm đỉnh bắt đầu vào duongDi với đỉnh đầu là start
         
-        boolean kt = false;
-
+        boolean kt = false; // Biến kiểm tra trạng thái kết thúc
+        
         // In tiêu đề cột
         System.out.println("==========================================================================================");
         writer.write("==========================================================================================" + System.lineSeparator());
@@ -104,16 +82,15 @@ public class BestFirstSearch {
 
             String ttKe = "";
             // Duyệt qua các đỉnh kề
-            List<Edge> edges = adj.get(dinhHienTai.dinh); // Key kiểu String
-            if (edges != null) {
-                for (Edge edge : edges) {
-                    String dinhKe = edge.dinhDen;
+            List<String> lstDinhKe = adj.get(dinhHienTai.dinh); // Danh sách đỉnh kề đỉnh hiện tại
+            if (lstDinhKe != null) { // Kiểm tra có tồn tại không
+                for (String dinhKe : lstDinhKe) {
                     if (!set.contains(dinhKe) && !duongDi.containsKey(dinhKe)) {
-                        int nextHeuristic = hm.getOrDefault(dinhKe, 0);
-                        Node dinhTiepTheo = new Node(dinhKe, nextHeuristic);
+                        int heuristicDinhKe = hm.getOrDefault(dinhKe, 0);
+                        Node dinhTiepTheo = new Node(dinhKe, heuristicDinhKe);
                         PQ.add(dinhTiepTheo);
                         duongDi.put(dinhKe, dinhHienTai.dinh);
-                        ttKe += dinhKe + "-" + nextHeuristic + " ";
+                        ttKe += dinhKe + "-" + heuristicDinhKe + " ";
                     }
                 }
             }
@@ -166,5 +143,4 @@ public class BestFirstSearch {
         writer.write("=> Đường đi: " + duongDiStr.toString() + System.lineSeparator());
         writer.flush();
     }
-
 }
