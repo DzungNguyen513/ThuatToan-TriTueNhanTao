@@ -48,8 +48,8 @@ public class Main_typeChar {
 	        	A_sao a = new A_sao();
 	            a.input();
 	            System.out.print("Nhập đỉnh bạn muốn tìm: ");
-	            char v = sc.next().charAt(0);
-	            a.aSao('A', v);
+	            String v = sc.next().toString();
+	            a.aSao("A", v);
 	        } else if(lc == 5) {
 	        	LogicMenhDe lg = new LogicMenhDe();
 	        	lg.input();
