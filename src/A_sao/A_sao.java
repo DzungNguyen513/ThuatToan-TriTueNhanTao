@@ -8,12 +8,11 @@ import java.util.*;
 
 public class A_sao {
     public int n, m;
-    public ArrayList<EdgeWeight>[] adj;
-    public boolean[] visited;
+    public Map<String, List<EdgeWeight>> adj;
     public String inPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\input.txt";
     public String outPath = "D:\\Code_Java\\Java_Project\\LearningAI_Java\\src\\A_sao\\output.txt";
     public FileWriter writer;
-    private Map<Character, Integer> heuristicValues = new HashMap<>();
+    private Map<String, Integer> heuristicValues = new HashMap<>();
 
    
     public A_sao() {
@@ -33,28 +32,23 @@ public class A_sao {
             String[] tokens = line.split(" ");
             n = Integer.parseInt(tokens[0]);
             m = Integer.parseInt(tokens[1]);
-            adj = new ArrayList[1001];
-            visited = new boolean[1001];
-
-            for (int i = 0; i < 1001; i++) {
-                adj[i] = new ArrayList<>();
-            }
-            Arrays.fill(visited, false);
+            adj = new HashMap<>();
 
             for (int i = 0; i < n; i++) {
                 line = br.readLine();
                 tokens = line.split(" ");
-                char node = tokens[0].charAt(0);
+                String node = tokens[0].toString();
                 int heuristicValue = Integer.parseInt(tokens[1]);
                 heuristicValues.put(node, heuristicValue);
+                adj.put(node, new ArrayList<>());
             }
             for (int i = 0; i < m; i++) {
                 line = br.readLine();
                 tokens = line.split(" ");
-                char from = tokens[0].charAt(0);
-                char to = tokens[1].charAt(0);
+                String from = tokens[0].toString();
+                String to = tokens[1].toString();
                 int weight = Integer.parseInt(tokens[2]);
-                adj[from - 'A'].add(new EdgeWeight(to, weight));
+                adj.get(from).add(new EdgeWeight(to, weight));
             }
             br.close();
         } catch (IOException e) {
@@ -63,48 +57,42 @@ public class A_sao {
     }
 
 
-    public void aSao(char a, char b) {
+    public void aSao(String a, String b) {
     	try {
     		PriorityQueue<NodeWeight> PQ = new PriorityQueue<>(Comparator.comparingInt(node -> node.f));
-            Map<Character, Character> parent = new HashMap<>(); 
-            Map<Character, Integer> gCosts = new HashMap<>();
-            Map<Character, Integer> hCosts = new HashMap<>();
+            Map<String, String> parent = new HashMap<>(); 
+            Map<String, Integer> gCosts = new HashMap<>();
+            Map<String, Integer> hCosts = new HashMap<>();
+            Set<String> set = new HashSet<>();
 
             PQ.add(new NodeWeight(a, 0, heuristic(a, b), 0));
             parent.put(a, null);
             gCosts.put(a, 0);
-
-            System.out.println("=============================================================================");
-            writer.write("=============================================================================" + System.lineSeparator());
-
-            System.out.printf("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
+            writeToBoth("=============================================================================",writer);  
             String header = String.format("%-5s | %-5s | %-5s | %-5s | %-5s | %-5s | %-30s\n", "TT", "TTK", "k(u,v)", "h(v)", "g(v)", "f(v)", "Danh sách L");
-            writer.write(header);
-            System.out.println("=============================================================================");
-            writer.write("=============================================================================" + System.lineSeparator());
+            writeToBoth2(header, writer);
+            writeToBoth("=============================================================================", writer);
+            
 
             while (!PQ.isEmpty()) {
-                NodeWeight x = PQ.poll(); // Đỉnh đầu của PQ
-                char xName = x.tenDinh;
+                NodeWeight x = PQ.poll();
+                String xName = x.tenDinh;
 
-                if (xName == b) {
-                	System.out.println(x.tenDinh + "     | Trạng thái kết thúc");
-                    writer.write(x.tenDinh + "     | Trạng thái kết thúc" +System.lineSeparator());
-
-                    System.out.println("=> Found " + xName+" !");
-                    writer.write("=> Found " + xName+" !" +System.lineSeparator());
+                if (xName.equals(b)) {
+                	writeToBoth(x.tenDinh + "     | Trạng thái kết thúc", writer);
+                	writeToBoth("=> Found " + xName+" !", writer);
                     inDuongDi(parent, b);
                     return;
                 }
+                
+                if (!set.contains(xName)) {
+                	set.add(xName);
 
-                if (!visited[xName - 'A']) {
-                    visited[xName - 'A'] = true;
-
-                    for (EdgeWeight edge : adj[xName - 'A']) { // Xử lý đỉnh kề
-                        char xDen = edge.dinhDen;
+                    for (EdgeWeight edge : adj.getOrDefault(xName, Collections.emptyList())) {
+                        String xDen = edge.dinhDen;
                         int newGCost = gCosts.get(xName) + edge.cost;
 
-                        if (!visited[xDen - 'A'] || newGCost < gCosts.getOrDefault(xDen, Integer.MAX_VALUE)) {
+                        if (!set.contains(xDen) || newGCost < gCosts.getOrDefault(xDen, Integer.MAX_VALUE)) {
                             int heuristic = heuristic(xDen, b);
                             int fCost = newGCost + heuristic;
 
@@ -112,21 +100,17 @@ public class A_sao {
                             parent.put(xDen, xName);
                             gCosts.put(xDen, newGCost);
                             hCosts.put(xDen, heuristic);
+
                             List<NodeWeight> sapXep = new ArrayList<>(PQ);
                             Collections.sort(sapXep, Comparator.comparingInt(node -> node.f));
-
-                            System.out.printf("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
-                            		xName, xDen, edge.cost, heuristic, newGCost, fCost, sapXep);
                             String line = String.format("%-5s | %-5s | %-5s  | %-5s | %-5s | %-5s | %-30s\n",
                             		xName, xDen, edge.cost, heuristic, newGCost, fCost, sapXep);
-                            writer.write(line);
+                            writeToBoth2(line, writer);
                         }
                     }
                 }
             }
-            System.out.println("Not Found " + b+ " !");
-            writer.write("Not Found " + b+ " !" +System.lineSeparator());
-
+            writeToBoth("Not Found " + b+ " !", writer);
     	}catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -139,61 +123,59 @@ public class A_sao {
         
     }
 
-    private int heuristic(char node, char goal) {
+    private int heuristic(String node, String goal) {
         return heuristicValues.getOrDefault(node, Integer.MAX_VALUE);
     }
 
-    private void inDuongDi(Map<Character, Character> parent, char goal) {
+    private void inDuongDi(Map<String, String> parent, String goal) {
     	
     	try {
-    		List<Character> path = new ArrayList<>();
-            Character xName = goal;
+    		List<String> path = new ArrayList<>();
+            String xName = goal;
             while (xName != null) {
                 path.add(xName);
                 xName = parent.get(xName);
             }
             Collections.reverse(path);
             
-            System.out.print("=> Đường đi: ");
-            writer.write("=> Đường đi: ");
+            writeToBoth2("=> Đường đi: ", writer);
 
             for (int i = 0; i < path.size(); i++) {
-                System.out.print(path.get(i));
-                writer.write(path.get(i));
+            	writeToBoth2(path.get(i), writer);
 
                 if (i < path.size() - 1) {
-                    System.out.print("->");
-                    writer.write("->");
-
+                	writeToBoth2("->", writer);
                 }
             }
-            System.out.println();
-            writer.write(System.lineSeparator());
-
-            System.out.println("=> Độ dài ngắn nhất: " + tinhKC(path));
-            writer.write("=> Độ dài ngắn nhất: " + tinhKC(path)+System.lineSeparator());
-
+            writeToBoth("", writer);
+            writeToBoth("=> Độ dài ngắn nhất: " + tinhKC(path), writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     
-    private int tinhKC(List<Character> p) {
+    private int tinhKC(List<String> p) {
         int kc = 0;
 
         for (int i = 0; i < p.size() - 1; i++) {
-            char x = p.get(i);
-            char xNext = p.get(i + 1);
+            String x = p.get(i);
+            String xNext = p.get(i + 1);
 
-            for (EdgeWeight edge : adj[x - 'A']) {
-                if (edge.dinhDen == xNext) {
-                	kc += edge.cost;
+            for (EdgeWeight edge : adj.getOrDefault(x, Collections.emptyList())) {
+                if (edge.dinhDen.equals(xNext)) {
+                    kc += edge.cost;
                     break;
                 }
             }
         }
         return kc;
     }
+    private void writeToBoth(String text, FileWriter writer) throws IOException {
+        System.out.println(text);
+        writer.write(text + System.lineSeparator());
+    }
+    private void writeToBoth2(String text, FileWriter writer) throws IOException {
+        System.out.print(text);
+        writer.write(text);
+    }
 }
-
-

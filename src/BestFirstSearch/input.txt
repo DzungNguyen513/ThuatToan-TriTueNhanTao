@@ -16,4 +16,4 @@ E G K
 F B
 I B G
 G B H
-H B1
+H B

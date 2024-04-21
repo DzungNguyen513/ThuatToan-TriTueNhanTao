@@ -1,10 +1,10 @@
 package A_sao;
 
 public class EdgeWeight {
-    char dinhDen;
+    String dinhDen;
     int cost; 
 
-    public EdgeWeight(char dinhDen, int cost) {
+    public EdgeWeight(String dinhDen, int cost) {
         this.dinhDen = dinhDen;
         this.cost = cost;
     }
